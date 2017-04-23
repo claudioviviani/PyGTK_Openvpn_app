@@ -1,6 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
+# Termino lo script se viene eseguito con Python 3.x 
+if (sys.version_info > (3, 0)):
+    print('Python 3 detected')
+    print('Run this script with Python 2.x !')
+    sys.exit()
+
 import pygtk
 pygtk.require('2.0')
 import gtk
