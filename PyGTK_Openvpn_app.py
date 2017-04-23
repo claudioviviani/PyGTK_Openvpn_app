@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
-# Termino lo script se viene eseguito con Python 3.x 
+# Termino lo script se viene eseguito con Python 3.x
 if (sys.version_info > (3, 0)):
     print('Python 3 detected')
     print('Run this script with Python 2.x !')
@@ -30,7 +30,7 @@ class OpenVpnMngr:
     # Modificare il path in maniera appropriata
     openvpnclipath = "/usr/bin/openvpn"
     # Modificare il path in maniera appropriata
-    openvpnclidir = "/home/claudio/.openvpn/"
+    openvpnclidir = "/home/user/openvpn_connections_dir/"
     openvpnconfext = "*.ovpn"
     killedconn = 0
     noauthtoken = ""
@@ -246,7 +246,8 @@ class OpenVpnMngr:
             # Se esiste la variabile "fileauth", elimino il file temporaneo per l'autenticazione
             if "fileauth" in locals():
                 os.unlink(fileauth)
-
+        else:
+            self.progressbar.set_text("")
 
     ###############################################################################
     # Questa funzione serve a controllare se tra i processi del sistema ci sono gia
