@@ -212,7 +212,8 @@ class OpenVpnMngr:
                 self.pbaractivity = False
                 self.progressbar.set_fraction(0.0)
                 self.progressbar.set_text("Connection Established")
-                print('Connessione OK')
+                # Togliere il commento sottostante solo per avere il debug della connessione sul terminale
+                #print('Connessione OK')
 
             else:
 
@@ -228,7 +229,8 @@ class OpenVpnMngr:
                     self.killedconn = 0
                 # Se la connessione non va a buon fine, tolgo il flag dal checkbox
                 chckb.set_active(False)
-                print('Connessione KO')
+                # Togliere il commento sottostante solo per avere il debug della connessione sul terminale
+                #print('Connessione KO')
 
             # Riabilito le checkbox alla fine dell'esecuzione di una connessione vpn
             for buttonbox in self.chckbuttonlist:
