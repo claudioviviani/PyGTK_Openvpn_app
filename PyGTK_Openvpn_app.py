@@ -23,12 +23,13 @@ class OpenVpnMngr:
     # Modificare il path in maniera appropriata
     openvpnclipath = "/usr/bin/openvpn"
     # Modificare il path in maniera appropriata
-    openvpnclidir = "/home/user/openvpn_conif_files"
+    openvpnclidir = "/home/claudio/.openvpn/"
     openvpnconfext = "*.ovpn"
+    killedconn = 0
     noauthtoken = ""
+    noputauth = ""
     uservpn = ""
     passvpn = ""
-    noputauth = ""
 
     ##################################################################################
     # Questa funzione serve a nascondere la finestra nel systray invece che chiuderla.
@@ -47,7 +48,10 @@ class OpenVpnMngr:
     ##################################################################
     # Questa funzione esegue l'update della progressbar
     def updatepbar(self):
-        self.progressbar.pulse()
+        new_val = self.progressbar.get_fraction() + 0.01
+        if new_val > 1.0:
+            new_val = 0.0
+        self.progressbar.set_fraction(new_val)
         return self.pbaractivity # True = repeat, False = stop
 
 
@@ -111,7 +115,6 @@ class OpenVpnMngr:
 
         # Se abilito il checkbox....
         if widget.get_active():
-
             # Genero un token da utilizzare nel caso in cui l'utente annulli la connessione
             # tramite credenziali.
             self.noauthtoken = uuid.uuid4().hex
@@ -125,7 +128,10 @@ class OpenVpnMngr:
             for ovpnprocess in self.CheckOpenvpnProc():
                 if data in str(ovpnprocess[-1:]):
                     subprocess.Popen(['kill', '-9', ovpnprocess[1]])
+                    self.killedconn = 1
                     self.pbaractivity = False
+                    # Resetto la progressbar
+                    self.progressbar.set_fraction(0.0)
                     self.progressbar.set_text("Connection Terminated")
 
 
@@ -173,6 +179,8 @@ class OpenVpnMngr:
 
             # Avvio della ProgressBar
             self.pbaractivity = True
+            # Resetto la progressbar
+            self.progressbar.set_fraction(0.0)
             self.progressbar.set_text("Connecting...")
             #
             # Dato che il processo openvpn non va in backround dopo che la connessione viene stabilita,
@@ -202,6 +210,7 @@ class OpenVpnMngr:
 
                 # Stop della ProgressBar
                 self.pbaractivity = False
+                self.progressbar.set_fraction(0.0)
                 self.progressbar.set_text("Connection Established")
                 print('Connessione OK')
 
@@ -209,7 +218,14 @@ class OpenVpnMngr:
 
                 # Stop della ProgressBar
                 self.pbaractivity = False
-                self.progressbar.set_text("Connection Error!")
+                # Resetto la progressbar
+                self.progressbar.set_fraction(0.0)
+                if self.killedconn == 0:
+                    self.progressbar.set_text("Connection Error!")
+                else:
+                    self.progressbar.set_text("Connection Terminated")
+                    # Resetto la variabile per la prossima connessione
+                    self.killedconn = 0
                 # Se la connessione non va a buon fine, tolgo il flag dal checkbox
                 chckb.set_active(False)
                 print('Connessione KO')
