@@ -1,5 +1,5 @@
 # PyGTK_Openvpn_app
-Openvpn client manager written in Python and PyGTK
+Openvpn client manager written in Python and PyGTK.
 <pre>
 Coded By :      Claudio Viviani
                 http://www.homelab.it
