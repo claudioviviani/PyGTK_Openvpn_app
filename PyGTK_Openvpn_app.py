@@ -52,6 +52,27 @@ class OpenVpnMngr:
         self.window.show()
 
 
+
+    #########################################################################################
+    # Queste due funzioni servono a creare il menu del systray premendo il tasto dx del mouse
+    def systray_menu(self, event_button, event_time, data=None):
+        menu = gtk.Menu()
+        close_item = gtk.MenuItem("Quit")
+
+        #Append the menu items
+        menu.append(close_item)
+        #add callbacks
+        close_item.connect_object("activate", gtk.main_quit, "Close App")
+        #Show the menu items
+        close_item.show()
+
+        #Popup the menu
+        menu.popup(None, None, gtk.status_icon_position_menu, event_button, event_time, self.icon)
+
+    def systray_right_click(self, data, event_button, event_time):
+        self.systray_menu(event_button, event_time)
+
+
     ##################################################################
     # Questa funzione esegue l'update della progressbar
     def updatepbar(self):
@@ -388,7 +409,10 @@ class OpenVpnMngr:
         # Appena creata la finestra principale la riduco nel system tray.
         self.window.hide_on_delete()
         # Inserisco l'icona della finestra per il system tray.
+        self.icon = gtk.StatusIcon()
         self.icon = gtk.status_icon_new_from_stock(gtk.STOCK_CONNECT)
+        # Menu Tasto destro su systray
+        self.icon.connect('popup-menu', self.systray_right_click)
         # Se viene cliccata l'icona del system tray esegui la funzione self.status_clicked
         self.icon.connect('activate', self.status_clicked )
 
