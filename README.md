@@ -12,3 +12,7 @@ Coded By :      Claudio Viviani
                 https://plus.google.com/+HomelabIt1/
                 https://www.youtube.com/channel/UCqqmSdMqf_exicCe_DjlBww
 </pre>
+
+## Requirements:
+- Python 2.7
+- PyGTK module
